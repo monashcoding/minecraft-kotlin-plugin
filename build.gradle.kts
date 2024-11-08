@@ -19,6 +19,10 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.mongodb:mongodb-driver-sync:4.11.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.13.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.13.0")
 }
 
 val targetJavaVersion = 21
