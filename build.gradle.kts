@@ -26,8 +26,22 @@ kotlin {
     jvmToolchain(targetJavaVersion)
 }
 
-tasks.build {
-    dependsOn("shadowJar")
+tasks {
+    val serverPluginsDir = file("./development-server/plugins")  // Update this path!
+
+    register<Copy>("copyToServer") {
+        from(shadowJar)
+        into(serverPluginsDir)
+    }
+
+    build {
+        dependsOn(shadowJar)
+        finalizedBy("copyToServer")
+    }
+
+    shadowJar {
+        archiveFileName.set("MAC-SMP-Core.jar")
+    }
 }
 
 tasks.processResources {
