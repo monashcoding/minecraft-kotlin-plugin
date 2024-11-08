@@ -1,0 +1,5 @@
+name: MacSMPCore
+version: '1.0-SNAPSHOT'
+main: dev.edwnl.macSMPCore.MacSMPCore
+api-version: '1.21'
+load: STARTUP
