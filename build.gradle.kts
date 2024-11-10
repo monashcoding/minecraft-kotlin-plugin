@@ -14,6 +14,7 @@ repositories {
     maven("https://oss.sonatype.org/content/groups/public/") {
         name = "sonatype"
     }
+    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
 }
 
 dependencies {
@@ -33,9 +34,13 @@ dependencies {
 
     // Scoreboard
     implementation("fr.mrmicky:fastboard:2.1.3")
+
+    // PlaceholderAPI
+    compileOnly("me.clip:placeholderapi:2.11.6")
 }
 
 val targetJavaVersion = 21
+
 kotlin {
     jvmToolchain(targetJavaVersion)
 }
@@ -54,7 +59,7 @@ tasks {
     }
 
     shadowJar {
-        relocate("fr.mrmicky.fastboard", "dev.edwnl.macSMPCore")
+//        relocate("fr.mrmicky.fastboard", "dev.edwnl.macSMPCore")
         archiveFileName.set("MAC-SMP-Core.jar")
     }
 }
