@@ -1,10 +1,6 @@
 package dev.edwnl.macSMPCore.deathbox
 
-import com.mojang.brigadier.Command
-import com.mojang.brigadier.context.CommandContext
 import dev.edwnl.macSMPCore.MacSMPCore
-import io.papermc.paper.command.brigadier.BasicCommand
-import io.papermc.paper.command.brigadier.CommandSourceStack
 import org.bukkit.Material
 import org.bukkit.block.Chest
 import org.bukkit.block.DoubleChest
@@ -13,13 +9,12 @@ import org.bukkit.entity.Player
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.command.CommandExecutor
-import kotlin.math.sqrt
 
 class ClaimChestCommand(private val plugin: MacSMPCore): CommandExecutor {
+    private val radius = 5
 
     private fun findNearestDeathChest(player: Player): Chest? {
         val location = player.location
-        val radius = 10
         var nearestChest: Chest? = null
         var shortestDistance = Double.MAX_VALUE
 
@@ -28,17 +23,14 @@ class ClaimChestCommand(private val plugin: MacSMPCore): CommandExecutor {
                 for (z in -radius..radius) {
                     val block = location.block.getRelative(x, y, z)
                     if (block.type == Material.CHEST) {
-                        val state = block.state
-                        if (state is Chest && state.hasMetadata("death_chest")) {
-                            val distance = sqrt(
-                                x * x.toDouble() +
-                                        y * y.toDouble() +
-                                        z * z.toDouble()
-                            )
-                            if (distance < shortestDistance) {
-                                shortestDistance = distance
-                                nearestChest = state
-                            }
+                        val state = block.state as? Chest ?: continue
+                        if (!DeathChestUtils.isDeathChest(state)) continue;
+
+                        // avoid sqrt as its inefficient
+                        val distance = x * x.toDouble() + y * y.toDouble() + z * z.toDouble()
+                        if (distance < shortestDistance) {
+                            shortestDistance = distance
+                            nearestChest = state
                         }
                     }
                 }
@@ -84,17 +76,16 @@ class ClaimChestCommand(private val plugin: MacSMPCore): CommandExecutor {
             return true;
         }
 
-        val player = sender as Player
-        val nearestChest = findNearestDeathChest(player)
+        val nearestChest = findNearestDeathChest(sender)
 
         if (nearestChest == null) {
-            player.sendMessage(Component.text("No death chests found within 10 blocks!", NamedTextColor.RED))
+            sender.sendMessage(Component.text("No death chests found within $radius blocks!", NamedTextColor.RED))
             return true;
         }
 
-        dropChestContents(nearestChest, player)
+        dropChestContents(nearestChest, sender)
         removeDeathChest(nearestChest)
-        player.sendMessage(
+        sender.sendMessage(
             Component.text(
                 "Successfully dropped items from the nearest death chest!",
                 NamedTextColor.GREEN
