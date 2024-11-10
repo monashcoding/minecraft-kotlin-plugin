@@ -4,17 +4,13 @@ import dev.edwnl.macSMPCore.MacSMPCore
 import dev.edwnl.macSMPCore.deathbox.DeathChestUtils.Companion.createDeathSkull
 import dev.edwnl.macSMPCore.deathbox.DeathChestUtils.Companion.createDoubleChest
 import dev.edwnl.macSMPCore.deathbox.DeathChestUtils.Companion.findValidDoubleChestLocation
+import dev.edwnl.macSMPCore.deathbox.DeathChestUtils.Companion.isDeathChest
 import dev.edwnl.macSMPCore.utils.Utils.Companion.formatLocation
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.block.BlockFace
 import org.bukkit.block.Chest
-import org.bukkit.block.Container
 import org.bukkit.block.DoubleChest
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -27,14 +23,8 @@ import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.inventory.meta.SkullMeta
-import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
-
-import org.bukkit.block.data.type.Chest.Type
-import org.bukkit.inventory.Inventory
-import org.bukkit.block.data.type.Chest as ChestData
 
 class DeathChestListener(private val plugin: MacSMPCore) : Listener {
 
@@ -89,8 +79,7 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
         if (holder is DoubleChest) {
             val leftChest = holder.leftSide as? Chest ?: return
             val rightChest = holder.rightSide as? Chest ?: return
-
-            if (!leftChest.hasMetadata(DEATH_CHEST_META)) return
+            if (!isDeathChest(leftChest)) return;
 
             // Remove chest if empty
             if (event.inventory.isEmpty) {
@@ -107,7 +96,7 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
         if (block.type != Material.CHEST) return
 
         val chest = block.state as? Chest ?: return
-        if (!chest.hasMetadata(DEATH_CHEST_META)) return
+        if (!isDeathChest(chest)) return;
 
         // Prevent breaking if not empty
         if (!chest.inventory.isEmpty) {

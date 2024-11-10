@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.block.BlockFace
 import org.bukkit.block.DoubleChest
 import org.bukkit.block.data.type.Chest
@@ -14,9 +15,12 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.metadata.FixedMetadataValue
+import org.bukkit.persistence.PersistentDataType
 
 class DeathChestUtils {
     companion object {
+        private val deathChestKey = NamespacedKey(MacSMPCore.instance, "death_chest")
+
         fun createDeathSkull(player: Player, deathMessage: Component?): ItemStack {
             val skull = ItemStack(Material.PLAYER_HEAD)
             val meta = skull.itemMeta as SkullMeta
@@ -42,8 +46,15 @@ class DeathChestUtils {
             block1.type = Material.CHEST
             block2.type = Material.CHEST
 
-            block1.setMetadata(DeathChestListener.DEATH_CHEST_META, FixedMetadataValue(plugin, true))
-            block2.setMetadata(DeathChestListener.DEATH_CHEST_META, FixedMetadataValue(plugin, true))
+            // Set both persistent data and metadata for backward compatibility
+            val chest1 = block1.state as org.bukkit.block.Chest
+            val chest2 = block2.state as org.bukkit.block.Chest
+
+            chest1.persistentDataContainer.set(deathChestKey, PersistentDataType.BYTE, 1)
+            chest2.persistentDataContainer.set(deathChestKey, PersistentDataType.BYTE, 1)
+
+            chest1.update()
+            chest2.update()
 
             // Configure the chest data to form a double chest
             val chestData1 = block1.blockData as Chest
@@ -64,6 +75,10 @@ class DeathChestUtils {
             chestState.update()
 
             return (chestState.inventory.holder as DoubleChest).inventory
+        }
+
+        fun isDeathChest(chest: org.bukkit.block.Chest): Boolean {
+            return chest.persistentDataContainer.has(deathChestKey, PersistentDataType.BYTE)
         }
 
         fun findValidDoubleChestLocation(location: Location): Location {
