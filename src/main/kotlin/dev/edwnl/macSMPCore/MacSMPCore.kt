@@ -2,6 +2,7 @@ package dev.edwnl.macSMPCore
 
 import dev.edwnl.macSMPCore.database.MongoDB
 import dev.edwnl.macSMPCore.listeners.ChatListener
+import dev.edwnl.macSMPCore.listeners.DeathChestListener
 import dev.edwnl.macSMPCore.listeners.PlayerLoginListener
 import dev.edwnl.macSMPCore.managers.AFKManager
 import dev.edwnl.macSMPCore.scoreboard.ScoreboardManager
@@ -29,6 +30,7 @@ class MacSMPCore : JavaPlugin() {
         // Register listeners
         server.pluginManager.registerEvents(PlayerLoginListener(mongoDB), this)
         server.pluginManager.registerEvents(ChatListener(), this)
+        server.pluginManager.registerEvents(DeathChestListener(this), this)
 
         AFKManager.getInstance().initialize(this)
         ScoreboardManager.getInstance().initialize(this)
