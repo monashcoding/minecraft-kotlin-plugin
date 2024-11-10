@@ -76,8 +76,9 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
         event.droppedExp = 0
 
         // Notify the player
-        event.entity.sendMessage(Component.text("Your items have been stored in a death chest at ${formatLocation(location)}. ", NamedTextColor.GREEN)
-            .append(Component.text("This chest does not expire, but can be opened by anyone. You can find your location by holding TAB.", NamedTextColor.GRAY)))
+        event.entity.sendMessage(Component.text("Your items have been stored in a death chest at ${formatLocation(location)}. ", NamedTextColor.GREEN))
+        event.entity.sendMessage(Component.text("If you can't open the chest, you can run ", NamedTextColor.GRAY).append(Component.text("/claimchest", NamedTextColor.YELLOW)).append(Component.text(" next to the box.", NamedTextColor.GRAY)))
+        event.entity.sendMessage(Component.text("This chest does not expire, but can be opened by anyone.", NamedTextColor.GRAY))
     }
 
     @EventHandler
@@ -132,28 +133,6 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
                     event.isCancelled = true
                 }
             }
-        }
-    }
-
-    // overrides cancelled events in case grief prevention cancels it
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    fun onInventoryOpen(event: PlayerInteractEvent) {
-        if (!event.action.isRightClick) return
-        val block = event.clickedBlock ?: return
-        if (block.type != Material.CHEST) return
-
-        val chest = block.state as? Chest ?: return
-        if (!chest.hasMetadata(DEATH_CHEST_META)) return
-
-        // If the event was cancelled (likely by a protection plugin) override it
-        if (event.isCancelled) {
-            event.isCancelled = false
-
-            // Some protection plugins might cancel the inventory open event as well
-            // Schedule the inventory opening for the next tick
-            Bukkit.getScheduler().runTask(plugin, Runnable {
-                event.player.openInventory(chest.inventory)
-            })
         }
     }
 }
