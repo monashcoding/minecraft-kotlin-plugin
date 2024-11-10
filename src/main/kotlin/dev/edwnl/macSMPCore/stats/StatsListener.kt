@@ -1,13 +1,9 @@
-package dev.edwnl.macSMPCore.listeners
+package dev.edwnl.macSMPCore.stats
 
-import dev.edwnl.macSMPCore.stats.StatsManager
-import dev.edwnl.macSMPCore.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.TextComponent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent

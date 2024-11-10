@@ -1,9 +1,7 @@
 package dev.edwnl.macSMPCore.stats
 
-import dev.edwnl.macSMPCore.managers.AFKManager
+import dev.edwnl.macSMPCore.afk.AFKManager
 import dev.edwnl.macSMPCore.database.MongoDB
-import dev.edwnl.macSMPCore.listeners.ChatListener
-import dev.edwnl.macSMPCore.listeners.StatsListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

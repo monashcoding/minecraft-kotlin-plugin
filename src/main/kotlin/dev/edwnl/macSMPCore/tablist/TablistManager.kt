@@ -1,4 +1,4 @@
-package dev.edwnl.macSMPCore.scoreboard
+package dev.edwnl.macSMPCore.tablist
 
 import dev.edwnl.macSMPCore.MacSMPCore
 import me.clip.placeholderapi.PlaceholderAPI
@@ -7,7 +7,6 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.text.SimpleDateFormat
 import kotlin.math.round
 
 class TabListManager(private val plugin: MacSMPCore) {

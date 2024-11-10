@@ -1,4 +1,4 @@
-package dev.edwnl.macSMPCore.managers
+package dev.edwnl.macSMPCore.afk
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -91,6 +91,12 @@ class AFKManager private constructor() {
     fun cleanup(player: Player) {
         lastActivityTimes.remove(player.uniqueId)
         afkPlayers.remove(player.uniqueId)
+    }
+
+    fun cleanup() {
+        plugin.server.onlinePlayers.forEach { player ->
+            getInstance().cleanup(player);
+        }
     }
 
     inner class AFKListener : Listener {
