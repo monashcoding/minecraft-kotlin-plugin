@@ -14,18 +14,33 @@ repositories {
     maven("https://oss.sonatype.org/content/groups/public/") {
         name = "sonatype"
     }
+    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
 }
 
 dependencies {
+    // PaperMC api
     compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+
+    // Kotlin driver
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    // MongoDB Driver
     implementation("org.mongodb:mongodb-driver-sync:4.11.1")
+
+    // Co-routines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.13.0")
     implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.13.0")
+
+    // Scoreboard
+    implementation("fr.mrmicky:fastboard:2.1.3")
+
+    // PlaceholderAPI
+    compileOnly("me.clip:placeholderapi:2.11.6")
 }
 
 val targetJavaVersion = 21
+
 kotlin {
     jvmToolchain(targetJavaVersion)
 }
@@ -44,6 +59,7 @@ tasks {
     }
 
     shadowJar {
+//        relocate("fr.mrmicky.fastboard", "dev.edwnl.macSMPCore")
         archiveFileName.set("MAC-SMP-Core.jar")
     }
 }

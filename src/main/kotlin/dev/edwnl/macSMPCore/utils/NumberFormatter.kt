@@ -19,4 +19,32 @@ object NumberFormatter {
             else -> "${hours}h ${mins}m"
         }
     }
+
+    fun formatSeconds(seconds: Long): String {
+        if (seconds < 60) return "${seconds}s"
+
+        val minutes = seconds / 60
+        if (minutes < 60) return "${minutes}m"
+
+        val hours = minutes / 60
+        if (hours < 24) {
+            val remainingMinutes = minutes % 60
+            return if (remainingMinutes > 0) "${hours}h ${remainingMinutes}m" else "${hours}h"
+        }
+
+        val days = hours / 24
+        val remainingHours = hours % 24
+        return when {
+            remainingHours > 0 -> "${days}d ${remainingHours}h"
+            else -> "${days}d"
+        }
+    }
+
+    fun formatDistance(meters: Long): String {
+        return when {
+            meters < 1000 -> "${meters}m"
+            meters < 1_000_000 -> String.format("%.1fkm", meters / 1000.0)
+            else -> String.format("%.1fMkm", meters / 1_000_000.0)
+        }
+    }
 }
