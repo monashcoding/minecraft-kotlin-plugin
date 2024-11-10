@@ -52,6 +52,7 @@ class MacSMPCore : JavaPlugin() {
         // Night skip module
         SleepManager(this).initialize();
 
+        getCommand("claimchest")?.setExecutor(ClaimChestCommand(this))
         logger.info("MAC SMP Core has been enabled!")
     }
 
