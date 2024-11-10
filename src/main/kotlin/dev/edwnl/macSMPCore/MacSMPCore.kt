@@ -4,9 +4,9 @@ import dev.edwnl.macSMPCore.database.MongoDB
 import dev.edwnl.macSMPCore.listeners.ChatListener
 import dev.edwnl.macSMPCore.listeners.DeathChestListener
 import dev.edwnl.macSMPCore.listeners.PlayerLoginListener
-import dev.edwnl.macSMPCore.managers.AFKManager
+import dev.edwnl.macSMPCore.afk.AFKManager
 import dev.edwnl.macSMPCore.scoreboard.ScoreboardManager
-import dev.edwnl.macSMPCore.scoreboard.TabListManager
+import dev.edwnl.macSMPCore.tablist.TabListManager
 import dev.edwnl.macSMPCore.sleep.SleepManager
 import dev.edwnl.macSMPCore.stats.StatsManager
 import org.bukkit.plugin.java.JavaPlugin
@@ -28,17 +28,29 @@ class MacSMPCore : JavaPlugin() {
         // Initialize MongoDB connection
         mongoDB = MongoDB(config.getString("mongodb.uri") ?: "")
 
-        // Register listeners
+        // Whitelist module
         server.pluginManager.registerEvents(PlayerLoginListener(mongoDB), this)
+
+        // Chat format module
         server.pluginManager.registerEvents(ChatListener(), this)
+
+        // Death chest module
         server.pluginManager.registerEvents(DeathChestListener(this), this)
 
+        // AFK detection module
         AFKManager.getInstance().initialize(this)
-        ScoreboardManager.getInstance().initialize(this)
-        StatsManager.getInstance().initialize(this, mongoDB)
-        SleepManager(this).initialize();
 
+        // Scoreboard module
+        ScoreboardManager.getInstance().initialize(this)
+
+        // Tab list module
         TabListManager(this);
+
+        // Player stats module
+        StatsManager.getInstance().initialize(this, mongoDB)
+
+        // Night skip module
+        SleepManager(this).initialize();
 
         logger.info("MAC SMP Core has been enabled!")
     }
@@ -48,11 +60,9 @@ class MacSMPCore : JavaPlugin() {
             mongoDB.close()
         }
 
-        server.onlinePlayers.forEach { player ->
-            AFKManager.getInstance().cleanup(player);
-        }
-
+        AFKManager.getInstance().cleanup();
         ScoreboardManager.getInstance().cleanup()
+
         logger.info("MAC SMP Core has been disabled!")
     }
 }

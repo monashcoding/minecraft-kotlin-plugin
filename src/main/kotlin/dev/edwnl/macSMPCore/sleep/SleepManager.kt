@@ -1,7 +1,7 @@
 package dev.edwnl.macSMPCore.sleep
 
 import dev.edwnl.macSMPCore.MacSMPCore
-import dev.edwnl.macSMPCore.managers.AFKManager
+import dev.edwnl.macSMPCore.afk.AFKManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.World
