@@ -4,17 +4,13 @@ import dev.edwnl.macSMPCore.MacSMPCore
 import dev.edwnl.macSMPCore.deathbox.DeathChestUtils.Companion.createDeathSkull
 import dev.edwnl.macSMPCore.deathbox.DeathChestUtils.Companion.createDoubleChest
 import dev.edwnl.macSMPCore.deathbox.DeathChestUtils.Companion.findValidDoubleChestLocation
+import dev.edwnl.macSMPCore.deathbox.DeathChestUtils.Companion.isDeathChest
 import dev.edwnl.macSMPCore.utils.Utils.Companion.formatLocation
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.block.BlockFace
 import org.bukkit.block.Chest
-import org.bukkit.block.Container
 import org.bukkit.block.DoubleChest
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -27,14 +23,8 @@ import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import org.bukkit.inventory.meta.SkullMeta
-import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
-
-import org.bukkit.block.data.type.Chest.Type
-import org.bukkit.inventory.Inventory
-import org.bukkit.block.data.type.Chest as ChestData
 
 class DeathChestListener(private val plugin: MacSMPCore) : Listener {
 
@@ -76,8 +66,9 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
         event.droppedExp = 0
 
         // Notify the player
-        event.entity.sendMessage(Component.text("Your items have been stored in a death chest at ${formatLocation(location)}. ", NamedTextColor.GREEN)
-            .append(Component.text("This chest does not expire, but can be opened by anyone. You can find your location by holding TAB.", NamedTextColor.GRAY)))
+        event.entity.sendMessage(Component.text("Your items have been stored in a death chest at ${formatLocation(location)}. ", NamedTextColor.GREEN))
+        event.entity.sendMessage(Component.text("If you can't open the chest, you can run ", NamedTextColor.GRAY).append(Component.text("/claimchest", NamedTextColor.YELLOW)).append(Component.text(" next to the box.", NamedTextColor.GRAY)))
+        event.entity.sendMessage(Component.text("This chest does not expire, but can be opened by anyone.", NamedTextColor.GRAY))
     }
 
     @EventHandler
@@ -88,8 +79,7 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
         if (holder is DoubleChest) {
             val leftChest = holder.leftSide as? Chest ?: return
             val rightChest = holder.rightSide as? Chest ?: return
-
-            if (!leftChest.hasMetadata(DEATH_CHEST_META)) return
+            if (!isDeathChest(leftChest)) return;
 
             // Remove chest if empty
             if (event.inventory.isEmpty) {
@@ -106,7 +96,7 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
         if (block.type != Material.CHEST) return
 
         val chest = block.state as? Chest ?: return
-        if (!chest.hasMetadata(DEATH_CHEST_META)) return
+        if (!isDeathChest(chest)) return;
 
         // Prevent breaking if not empty
         if (!chest.inventory.isEmpty) {
@@ -132,28 +122,6 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
                     event.isCancelled = true
                 }
             }
-        }
-    }
-
-    // overrides cancelled events in case grief prevention cancels it
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    fun onInventoryOpen(event: PlayerInteractEvent) {
-        if (!event.action.isRightClick) return
-        val block = event.clickedBlock ?: return
-        if (block.type != Material.CHEST) return
-
-        val chest = block.state as? Chest ?: return
-        if (!chest.hasMetadata(DEATH_CHEST_META)) return
-
-        // If the event was cancelled (likely by a protection plugin) override it
-        if (event.isCancelled) {
-            event.isCancelled = false
-
-            // Some protection plugins might cancel the inventory open event as well
-            // Schedule the inventory opening for the next tick
-            Bukkit.getScheduler().runTask(plugin, Runnable {
-                event.player.openInventory(chest.inventory)
-            })
         }
     }
 }
