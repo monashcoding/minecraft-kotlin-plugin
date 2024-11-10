@@ -7,6 +7,7 @@ import dev.edwnl.macSMPCore.listeners.PlayerLoginListener
 import dev.edwnl.macSMPCore.managers.AFKManager
 import dev.edwnl.macSMPCore.scoreboard.ScoreboardManager
 import dev.edwnl.macSMPCore.scoreboard.TabListManager
+import dev.edwnl.macSMPCore.sleep.SleepManager
 import dev.edwnl.macSMPCore.stats.StatsManager
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -35,6 +36,7 @@ class MacSMPCore : JavaPlugin() {
         AFKManager.getInstance().initialize(this)
         ScoreboardManager.getInstance().initialize(this)
         StatsManager.getInstance().initialize(this, mongoDB)
+        SleepManager(this).initialize();
 
         TabListManager(this);
 
