@@ -63,7 +63,7 @@ class MacSMPCore : JavaPlugin() {
         // MOTD Module
         MOTDManager(this);
 
-        ClearlagSystem(this);
+        clearlagSystem = ClearlagSystem(this);
 
         server.pluginManager.registerEvents(EndPortalListener(this), this)
 
