@@ -1,14 +1,21 @@
 package dev.edwnl.macSMPCore
 
+import dev.edwnl.macSMPCore.afk.AFKManager
+import dev.edwnl.macSMPCore.clearlag.ClearlagSystem
 import dev.edwnl.macSMPCore.database.MongoDB
+import dev.edwnl.macSMPCore.deathbox.ClaimChestCommand
 import dev.edwnl.macSMPCore.listeners.ChatListener
 import dev.edwnl.macSMPCore.listeners.DeathChestListener
+import dev.edwnl.macSMPCore.listeners.EndPortalListener
 import dev.edwnl.macSMPCore.listeners.PlayerLoginListener
-import dev.edwnl.macSMPCore.afk.AFKManager
+import dev.edwnl.macSMPCore.motd.MOTDManager
 import dev.edwnl.macSMPCore.scoreboard.ScoreboardManager
-import dev.edwnl.macSMPCore.tablist.TabListManager
 import dev.edwnl.macSMPCore.sleep.SleepManager
 import dev.edwnl.macSMPCore.stats.StatsManager
+import dev.edwnl.macSMPCore.tablist.TabListManager
+import io.papermc.paper.plugin.bootstrap.BootstrapContext
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
 import org.bukkit.plugin.java.JavaPlugin
 
 class MacSMPCore : JavaPlugin() {
@@ -18,6 +25,7 @@ class MacSMPCore : JavaPlugin() {
     }
 
     private lateinit var mongoDB: MongoDB
+    private lateinit var clearlagSystem: ClearlagSystem
 
     override fun onEnable() {
         instance = this
@@ -52,7 +60,15 @@ class MacSMPCore : JavaPlugin() {
         // Night skip module
         SleepManager(this).initialize();
 
+        // MOTD Module
+        MOTDManager(this);
+
+        ClearlagSystem(this);
+
+        server.pluginManager.registerEvents(EndPortalListener(this), this)
+
         getCommand("claimchest")?.setExecutor(ClaimChestCommand(this))
+
         logger.info("MAC SMP Core has been enabled!")
     }
 
@@ -63,6 +79,7 @@ class MacSMPCore : JavaPlugin() {
 
         AFKManager.getInstance().cleanup();
         ScoreboardManager.getInstance().cleanup()
+        clearlagSystem.shutdown();
 
         logger.info("MAC SMP Core has been disabled!")
     }
