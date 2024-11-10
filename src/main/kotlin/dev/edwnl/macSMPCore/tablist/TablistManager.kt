@@ -1,4 +1,4 @@
-package dev.edwnl.macSMPCore.scoreboard
+package dev.edwnl.macSMPCore.tablist
 
 import dev.edwnl.macSMPCore.MacSMPCore
 import me.clip.placeholderapi.PlaceholderAPI
@@ -7,12 +7,9 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlin.math.round
 
 class TabListManager(private val plugin: MacSMPCore) {
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a")
-
     init {
         startUpdateTask()
     }
@@ -24,14 +21,14 @@ class TabListManager(private val plugin: MacSMPCore) {
     }
 
     private fun updateTabList() {
-        val header = buildHeader()
-
         Bukkit.getOnlinePlayers().forEach { player ->
-            player.sendPlayerListHeaderAndFooter(header, buildFooter(player))
+            player.sendPlayerListHeaderAndFooter(buildHeader(player), buildFooter(player))
         }
     }
 
-    private fun buildHeader(): Component {
+    private fun buildHeader(player: Player): Component {
+        val location = player.location;
+
         return Component.text()
             .append(
                 Component.text("MAC PROJECTS", NamedTextColor.YELLOW)
@@ -40,7 +37,7 @@ class TabListManager(private val plugin: MacSMPCore) {
             .append(Component.newline())
             .append(
                 Component.text(
-                    dateFormat.format(Date()),
+                    "Location: X ${round(location.x)} Y ${round(location.y)} Z ${round(location.z)}",
                     NamedTextColor.GRAY
                 )
             )
@@ -65,9 +62,10 @@ class TabListManager(private val plugin: MacSMPCore) {
             )
             .append(Component.newline())
             .append(
-                Component.text("MSPT 1m (min/med/95%/max): ", NamedTextColor.WHITE)
+                Component.text("MSPT (min/med/95%/max): ", NamedTextColor.WHITE)
                     .append(Component.text(mspt, NamedTextColor.GREEN))
             )
+            .append(Component.newline())
             .append(
                 Component.text("monashcoding.com", NamedTextColor.YELLOW)
             )

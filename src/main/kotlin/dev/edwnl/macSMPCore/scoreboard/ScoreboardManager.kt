@@ -1,7 +1,7 @@
 package dev.edwnl.macSMPCore.scoreboard
 
 import dev.edwnl.macSMPCore.stats.StatsManager
-import dev.edwnl.macSMPCore.utils.NumberFormatter
+import dev.edwnl.macSMPCore.utils.Utils
 import fr.mrmicky.fastboard.FastBoard
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -72,13 +72,13 @@ class ScoreboardManager private constructor() {
         lines.add("")
 
         // Stats with rankings
-        lines.add("§fPlaytime: §a${NumberFormatter.formatSeconds(stats.playtime)} §f(#§e${stats.rankings.playtimeRank}§f)")
+        lines.add("§fPlaytime: §a${Utils.formatSeconds(stats.playtime)} §f(#§e${stats.rankings.playtimeRank}§f)")
         lines.add("§fAchievements: §a${stats.achievements} §f(#§e${stats.rankings.achievementsRank}§f)")
         lines.add("")
         lines.add("§fDeaths: §a${stats.deaths} §f(#§e${stats.rankings.deathsRank}§f)")
         lines.add("§fKills: §a${stats.kills} §f(#§e${stats.rankings.killsRank}§f)")
         lines.add("§fBlocks: §a${stats.blocks} §f(#§e${stats.rankings.blocksRank}§f)")
-        lines.add("§fDistance: §a${NumberFormatter.formatDistance(stats.distance)} §f(#§e${stats.rankings.distanceRank}§f)")
+        lines.add("§fDistance: §a${Utils.formatDistance(stats.distance)} §f(#§e${stats.rankings.distanceRank}§f)")
         lines.add("")
         lines.add("§emonashcoding.com")
 

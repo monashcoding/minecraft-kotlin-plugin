@@ -15,7 +15,7 @@ class PlayerLoginListener(private val mongoDB: MongoDB) : Listener {
         if (!mongoDB.isPlayerWhitelisted(event.uniqueId)) {
             event.disallow(
                 AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
-                Component.text("You are not whitelisted. Use /whitelist add [username] on the MAC discord!")
+                Component.text("You are not whitelisted. Use /whitelist add ${event.playerProfile.name} on the MAC discord!")
                     .color(NamedTextColor.RED)
             )
         }

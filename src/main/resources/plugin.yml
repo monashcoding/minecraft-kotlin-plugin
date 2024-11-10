@@ -1,0 +1,11 @@
+name: MacSMPCore
+version: '1.0'
+main: dev.edwnl.macSMPCore.MacSMPCore
+api-version: '1.20'
+authors:
+  - edwnl
+commands:
+  claimchest:
+    description: Claims items from the nearest death chest
+    usage: /claimchest
+    aliases: [cc]
