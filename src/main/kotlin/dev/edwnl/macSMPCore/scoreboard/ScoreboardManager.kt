@@ -12,10 +12,12 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.HashSet
 
 class ScoreboardManager private constructor() {
     private lateinit var plugin: JavaPlugin
     private val boards = ConcurrentHashMap<UUID, FastBoard>()
+    private val disabledPlayers = HashSet<UUID>();
 
     companion object {
         @Volatile
@@ -45,10 +47,23 @@ class ScoreboardManager private constructor() {
         }, 20L, 20L)
     }
 
+    fun toggleScoreboard(player: Player): Boolean {
+        val uuid = player.uniqueId
+        return if (disabledPlayers.contains(uuid)) {
+            disabledPlayers.remove(uuid)
+            createBoard(player)
+            true // Scoreboard enabled
+        } else {
+            disabledPlayers.add(uuid)
+            removeBoard(player)
+            false // Scoreboard disabled
+        }
+    }
+
     private fun updateAllBoards() {
         boards.forEach { (uuid, board) ->
             plugin.server.getPlayer(uuid)?.let { player ->
-                updateBoard(player, board)
+                if (!disabledPlayers.contains(player.uniqueId)) updateBoard(player, board)
             }
         }
     }
@@ -80,6 +95,7 @@ class ScoreboardManager private constructor() {
         lines.add("§fBlocks: §a${stats.blocks} §f(#§e${stats.rankings.blocksRank}§f)")
         lines.add("§fDistance: §a${Utils.formatDistance(stats.distance)} §f(#§e${stats.rankings.distanceRank}§f)")
         lines.add("")
+        lines.add("§8Disable: /scoreboard")
         lines.add("§emonashcoding.com")
 
         board.updateLines(lines)

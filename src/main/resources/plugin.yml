@@ -9,3 +9,7 @@ commands:
     description: Claims items from the nearest death chest
     usage: /claimchest
     aliases: [cc]
+  scoreboard:
+    description: Toggle the scoreboard visibility
+    usage: /<command>
+    aliases: [sb]
