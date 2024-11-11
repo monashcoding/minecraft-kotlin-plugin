@@ -9,3 +9,9 @@ commands:
     description: Claims items from the nearest death chest
     usage: /claimchest
     aliases: [cc]
+#  nick:
+#    description: Change your nickname
+#    usage: /nick <name|reset>
+#  whois:
+#    description: Reveals the true identity of a nicked player
+#    usage: /whois <player>
