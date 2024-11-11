@@ -69,6 +69,8 @@ class ScoreboardManager private constructor() {
     }
 
     fun createBoard(player: Player) {
+        if (disabledPlayers.contains(player.uniqueId)) return
+
         val board = FastBoard(player)
         board.updateTitle("§e§lMAC PROJECTS")
         boards[player.uniqueId] = board
