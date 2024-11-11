@@ -43,5 +43,14 @@ class Utils {
                 else -> String.format("%.1fMkm", meters / 1_000_000.0)
             }
         }
+
+        fun formatStats(number: Long): String {
+            return when {
+                number < 1000 -> number.toString()
+                number < 1_000_000 -> String.format("%.1fk", number / 1000.0)
+                number < 1_000_000_000 -> String.format("%.1fM", number / 1_000_000.0)
+                else -> String.format("%.1fB", number / 1_000_000_000.0)
+            }
+        }
     }
 }
