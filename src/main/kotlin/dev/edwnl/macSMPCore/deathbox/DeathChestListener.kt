@@ -36,16 +36,19 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerDeath(event: PlayerDeathEvent) {
+        // Create and add player head with death cause
+        val skull = createDeathSkull(event.entity, event.deathMessage())
+
         // Don't create chest if no items or XP to store
-        if (event.drops.isEmpty() && event.droppedExp == 0) return
+        if (event.drops.isEmpty() && event.droppedExp == 0) {
+            event.drops.addFirst(skull);
+            return
+        }
 
         val location = findValidDoubleChestLocation(event.entity.location)
 
         // Create the double chest
         val inventory = createDoubleChest(location, event.entity, plugin)
-
-        // Create and add player head with death cause
-        val skull = createDeathSkull(event.entity, event.deathMessage())
 
         // Store items
         inventory.addItem(skull)
@@ -67,7 +70,7 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
 
         // Notify the player
         event.entity.sendMessage(Component.text("Your items have been stored in a death chest at ${formatLocation(location)}. ", NamedTextColor.GREEN))
-        event.entity.sendMessage(Component.text("If you can't open the chest, you can run ", NamedTextColor.GRAY).append(Component.text("/claimchest", NamedTextColor.YELLOW)).append(Component.text(" next to the box.", NamedTextColor.GRAY)))
+        event.entity.sendMessage(Component.text("If you can't open the chest, you can run ", NamedTextColor.GRAY).append(Component.text("/claimchest", NamedTextColor.YELLOW)).append(Component.text(" next to it.", NamedTextColor.GRAY)))
         event.entity.sendMessage(Component.text("This chest does not expire, but can be opened by anyone.", NamedTextColor.GRAY))
     }
 
