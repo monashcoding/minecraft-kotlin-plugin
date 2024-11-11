@@ -25,7 +25,7 @@ class MacSMPCore : JavaPlugin() {
     }
 
     private lateinit var mongoDB: MongoDB
-    private lateinit var clearlagSystem: ClearlagSystem
+//    private lateinit var clearlagSystem: ClearlagSystem
 
     override fun onEnable() {
         instance = this
@@ -63,7 +63,7 @@ class MacSMPCore : JavaPlugin() {
         // MOTD Module
         MOTDManager(this);
 
-        clearlagSystem = ClearlagSystem(this);
+//        clearlagSystem = ClearlagSystem(this);
 
         server.pluginManager.registerEvents(EndPortalListener(this), this)
 
@@ -79,7 +79,7 @@ class MacSMPCore : JavaPlugin() {
 
         AFKManager.getInstance().cleanup();
         ScoreboardManager.getInstance().cleanup()
-        clearlagSystem.shutdown();
+//        clearlagSystem.shutdown();
 
         logger.info("MAC SMP Core has been disabled!")
     }
