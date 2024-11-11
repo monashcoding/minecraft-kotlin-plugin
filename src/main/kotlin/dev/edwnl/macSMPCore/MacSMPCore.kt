@@ -1,7 +1,6 @@
 package dev.edwnl.macSMPCore
 
 import dev.edwnl.macSMPCore.afk.AFKManager
-import dev.edwnl.macSMPCore.clearlag.ClearlagSystem
 import dev.edwnl.macSMPCore.database.MongoDB
 import dev.edwnl.macSMPCore.deathbox.ClaimChestCommand
 import dev.edwnl.macSMPCore.listeners.ChatListener
@@ -13,9 +12,6 @@ import dev.edwnl.macSMPCore.scoreboard.ScoreboardManager
 import dev.edwnl.macSMPCore.sleep.SleepManager
 import dev.edwnl.macSMPCore.stats.StatsManager
 import dev.edwnl.macSMPCore.tablist.TabListManager
-import io.papermc.paper.plugin.bootstrap.BootstrapContext
-import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
 import org.bukkit.plugin.java.JavaPlugin
 
 class MacSMPCore : JavaPlugin() {
