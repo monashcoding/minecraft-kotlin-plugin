@@ -14,7 +14,9 @@ repositories {
     maven("https://oss.sonatype.org/content/groups/public/") {
         name = "sonatype"
     }
-    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
+        name = "placeholder-api"
+    }
 }
 
 dependencies {
@@ -37,6 +39,9 @@ dependencies {
 
     // PlaceholderAPI
     compileOnly("me.clip:placeholderapi:2.11.6")
+
+    // NickAPI
+    compileOnly(files("libs/nickapi-7.4.jar"))
 }
 
 val targetJavaVersion = 21
@@ -59,7 +64,6 @@ tasks {
     }
 
     shadowJar {
-//        relocate("fr.mrmicky.fastboard", "dev.edwnl.macSMPCore")
         archiveFileName.set("MAC-SMP-Core.jar")
     }
 }
