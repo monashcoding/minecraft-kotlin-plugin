@@ -2,11 +2,14 @@ package dev.edwnl.macSMPCore.deathbox
 
 import dev.edwnl.macSMPCore.MacSMPCore
 import dev.edwnl.macSMPCore.listeners.DeathChestListener
+import dev.edwnl.macSMPCore.utils.Utils
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.World
 import org.bukkit.block.BlockFace
 import org.bukkit.block.DoubleChest
 import org.bukkit.block.data.type.Chest
@@ -81,8 +84,17 @@ class DeathChestUtils {
             return chest.persistentDataContainer.has(deathChestKey, PersistentDataType.BYTE)
         }
 
-        fun findValidDoubleChestLocation(location: Location): Location {
+        fun findValidDoubleChestLocation(location: Location, player: Player): Location {
             val original = location.clone().block.location
+
+            if (original.world != null && original.world.environment == World.Environment.THE_END) {
+                if (original.y < 0) {
+                    player.sendMessage(Component.text()
+                        .append(Component.text("It looks like you died to the void! We have moved your deathbox up.", NamedTextColor.RED))
+                        .build())
+                    original.set(original.x, 70.0, original.z)
+                }
+            }
 
             // Check original location and space to the right
             if (isValidDoubleChestLocation(original)) return original

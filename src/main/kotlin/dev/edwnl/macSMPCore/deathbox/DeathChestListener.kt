@@ -12,6 +12,7 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.block.Chest
 import org.bukkit.block.DoubleChest
+import org.bukkit.damage.DamageSource
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -45,7 +46,7 @@ class DeathChestListener(private val plugin: MacSMPCore) : Listener {
             return
         }
 
-        val location = findValidDoubleChestLocation(event.entity.location)
+        val location = findValidDoubleChestLocation(event.entity.location, event.player)
 
         // Create the double chest
         val inventory = createDoubleChest(location, event.entity, plugin)

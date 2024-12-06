@@ -5,7 +5,6 @@ import dev.edwnl.macSMPCore.database.MongoDB
 import dev.edwnl.macSMPCore.deathbox.ClaimChestCommand
 import dev.edwnl.macSMPCore.listeners.ChatListener
 import dev.edwnl.macSMPCore.listeners.DeathChestListener
-import dev.edwnl.macSMPCore.listeners.EndPortalListener
 import dev.edwnl.macSMPCore.listeners.PlayerLoginListener
 import dev.edwnl.macSMPCore.motd.MOTDManager
 import dev.edwnl.macSMPCore.scoreboard.ScoreboardManager
@@ -21,7 +20,6 @@ class MacSMPCore : JavaPlugin() {
     }
 
     private lateinit var mongoDB: MongoDB
-//    private lateinit var clearlagSystem: ClearlagSystem
 
     override fun onEnable() {
         instance = this
@@ -59,10 +57,6 @@ class MacSMPCore : JavaPlugin() {
         // MOTD Module
         MOTDManager(this);
 
-//        clearlagSystem = ClearlagSystem(this);
-
-        server.pluginManager.registerEvents(EndPortalListener(this), this)
-
         getCommand("claimchest")?.setExecutor(ClaimChestCommand(this))
 
         logger.info("MAC SMP Core has been enabled!")
@@ -75,7 +69,6 @@ class MacSMPCore : JavaPlugin() {
 
         AFKManager.getInstance().cleanup();
         ScoreboardManager.getInstance().cleanup()
-//        clearlagSystem.shutdown();
 
         logger.info("MAC SMP Core has been disabled!")
     }
