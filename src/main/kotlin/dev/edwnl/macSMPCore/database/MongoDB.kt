@@ -102,6 +102,8 @@ class MongoDB(uri: String) {
         return whitelistCollection.find(query).first() != null
     }
 
+
+
     /**
      * Closes the MongoDB connection
      */

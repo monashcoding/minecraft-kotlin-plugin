@@ -8,6 +8,8 @@ import dev.edwnl.macSMPCore.listeners.DeathChestListener
 import dev.edwnl.macSMPCore.listeners.EndPortalListener
 import dev.edwnl.macSMPCore.listeners.PlayerLoginListener
 import dev.edwnl.macSMPCore.motd.MOTDManager
+import dev.edwnl.macSMPCore.nick.NickCommand
+import dev.edwnl.macSMPCore.nick.WhoisCommand
 import dev.edwnl.macSMPCore.scoreboard.ScoreboardManager
 import dev.edwnl.macSMPCore.sleep.SleepManager
 import dev.edwnl.macSMPCore.stats.StatsManager
@@ -64,6 +66,8 @@ class MacSMPCore : JavaPlugin() {
         server.pluginManager.registerEvents(EndPortalListener(this), this)
 
         getCommand("claimchest")?.setExecutor(ClaimChestCommand(this))
+        getCommand("nick")?.setExecutor(NickCommand())
+        getCommand("whois")?.setExecutor(WhoisCommand())
 
         logger.info("MAC SMP Core has been enabled!")
     }

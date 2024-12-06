@@ -37,6 +37,8 @@ dependencies {
 
     // PlaceholderAPI
     compileOnly("me.clip:placeholderapi:2.11.6")
+
+    compileOnly(files("libs/nickapi-7.5.jar"))
 }
 
 val targetJavaVersion = 21

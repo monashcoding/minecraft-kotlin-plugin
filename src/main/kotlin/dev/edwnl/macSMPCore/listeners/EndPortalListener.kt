@@ -18,21 +18,16 @@ class EndPortalListener(private val plugin: MacSMPCore) : Listener {
 
     @EventHandler
     fun onPlayerInteract(event: PlayerInteractEvent) {
-        // Check for interactions with end portal frames
-        if (event.clickedBlock?.type == Material.END_PORTAL_FRAME) {
+        // Prevent placing eyes of ender in frames
+        if (event.action == Action.RIGHT_CLICK_BLOCK &&
+            event.clickedBlock?.type == Material.END_PORTAL_FRAME &&
+            event.item?.type == Material.ENDER_EYE) {
             event.isCancelled = true
             event.player.sendMessage(
                 Component.text("The End is currently disabled! " +
                         "It will be enabled at a set time in the near future.")
                     .color(NamedTextColor.RED)
             )
-        }
-
-        // Prevent placing eyes of ender in frames
-        if (event.action == Action.RIGHT_CLICK_BLOCK &&
-            event.clickedBlock?.type == Material.END_PORTAL_FRAME &&
-            event.item?.type == Material.ENDER_EYE) {
-            event.isCancelled = true
         }
     }
 }
